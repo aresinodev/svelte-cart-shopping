@@ -1,11 +1,13 @@
 <script>
   import { CartStore } from "../stores/CartStore.js";
 
+  let zoom = false;
   $: totalQuantity = $CartStore.length || 0;
 
-  const zoom = (node, { duration }) => {
-    console.log("CHANGE");
-  };
+  $: if (totalQuantity) {
+    zoom = true;
+    setTimeout(() => (zoom = false), 500);
+  }
 </script>
 
 <style>
@@ -26,6 +28,7 @@
 
   .cart {
     position: relative;
+    cursor: pointer;
   }
 
   .cart img {
@@ -34,6 +37,7 @@
 
   .total-quantity {
     width: 1em;
+    height: 1em;
     position: absolute;
     right: -0.5em;
     top: -0.2em;
@@ -44,7 +48,10 @@
     border-radius: 10px;
     font-size: 14px;
     text-align: center;
-    transition: transform 0.5s;
+  }
+
+  .zoom {
+    animation: zoom 0.5s;
   }
 </style>
 
@@ -52,10 +59,8 @@
   <h1>Carro de la compra</h1>
 
   <div class="cart">
-    <div class="total-quantity">
-      <span
-        class="total-quantity-number"
-        transition:zoom={{ duration: 500 }}>{totalQuantity}</span>
+    <div class="total-quantity" class:zoom>
+      <span class="total-quantity-number">{totalQuantity}</span>
     </div>
     <img src="/images/shopping-cart.svg" alt="Shopping cart" />
   </div>

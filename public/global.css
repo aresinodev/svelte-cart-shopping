@@ -13,3 +13,20 @@ body {
 .mt-1 {
   margin-top: 1em;
 }
+
+@keyframes zoom {
+  0% {
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  50% {
+    font-size: 20px;
+    border-radius: 20px;
+  }
+
+  100% {
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
