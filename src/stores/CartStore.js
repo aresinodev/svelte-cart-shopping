@@ -9,23 +9,23 @@ const addProductToCart = (product, quantity) => {
     cart = value;
   });
 
-  const productCartIndex = cart.findIndex((item) => item.id === product.id);
+  const copiedCart = [...cart];
+  let itemCart = copiedCart.find((item) => item.product.id === product.id);
 
-  if (productCartIndex !== -1) {
-    const itemCartToUpdate = cart[productCartIndex];
-    itemCartToUpdate.quantity += quantity;
-    cart[productCartIndex] = itemCartToUpdate;
+  if (itemCart) {
+    itemCart.quantity++;
 
-    cartStore.update(() => [...cart]);
+    cartStore.update(() => copiedCart);
   } else {
     cartStore.update((items) => {
+      const copiedItems = [...items];
       const itemToCart = {
         id: cart.length + 1,
         product,
         quantity,
       };
 
-      return [itemToCart, ...items];
+      return [itemToCart, ...copiedItems];
     });
   }
 
@@ -37,15 +37,13 @@ const addProductToCart = (product, quantity) => {
 
 const updateQuantityItemCart = (id, quantity, type) => {
   cartStore.update((items) => {
-    const productCartIndex = items.findIndex((item) => item.id === id);
-    const itemCart = items[productCartIndex];
-    itemCart.quantity = quantity;
-
-    items[productCartIndex] = itemCart;
+    const copiedItems = [...items];
+    const itemCart = copiedItems.find((item) => item.id === id);
+    productCart.quantity = quantity;
 
     updateTotalPrice(itemCart.product.price, type);
 
-    return [...items];
+    return copiedItems;
   });
 };
 
