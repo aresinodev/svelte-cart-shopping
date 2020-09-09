@@ -1,8 +1,15 @@
 <script>
-  import { derived } from "svelte/store";
+  import { getContext } from "svelte";
+
   import { itemsNumber } from "../stores/CartStore";
+  import Cart from "./Cart.svelte";
 
   let zoom = false;
+  const { open } = getContext("simple-modal");
+
+  const showCart = () => {
+    open(Cart);
+  };
 
   $: if ($itemsNumber) {
     zoom = true;
@@ -58,7 +65,7 @@
 <header>
   <h1>Carro de la compra</h1>
 
-  <div class="cart">
+  <div class="cart" on:click={showCart}>
     <div class="total-quantity" class:zoom>
       <span class="total-quantity-number">{$itemsNumber}</span>
     </div>

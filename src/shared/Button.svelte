@@ -34,7 +34,7 @@
     border: 2px solid #d91b42;
   }
 
-  .primary.inverse {
+  .secondary.inverse {
     color: #45c496;
     background: white;
     border: 2px solid #45c496;

@@ -5,11 +5,6 @@ body {
   margin: 0;
 }
 
-.img-fluid {
-  max-width: 100%;
-  height: auto;
-}
-
 .mt-1 {
   margin-top: 1em;
 }
