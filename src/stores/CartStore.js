@@ -59,8 +59,7 @@ const deleteProductCart = (id, total) => {
 
 const updateTotalPrice = (price, type) => {
   totalPrice.update((value) => {
-    const newValue = type === "+" ? (value += price) : (value -= price);
-    return newValue;
+    return type === "+" ? value + price : value - price;
   });
 };
 
