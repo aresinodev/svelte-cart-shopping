@@ -1,10 +1,10 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 
-export const CartStore = writable([]);
+const cartStore = writable([]);
 
-export const addProductToCart = (product, quantity) => {
+const addProductToCart = (product, quantity) => {
   let cart;
-  const subscribeCart = CartStore.subscribe((value) => {
+  const subscribeCart = cartStore.subscribe((value) => {
     cart = value;
   });
 
@@ -15,9 +15,9 @@ export const addProductToCart = (product, quantity) => {
     itemCartToUpdate.quantity += quantity;
     cart[productCartIndex] = itemCartToUpdate;
 
-    CartStore.update(() => [...cart]);
+    cartStore.update(() => [...cart]);
   } else {
-    CartStore.update((items) => {
+    cartStore.update((items) => {
       const itemToCart = {
         id: cart.length + 1,
         product,
@@ -28,6 +28,12 @@ export const addProductToCart = (product, quantity) => {
     });
   }
 
+  console.log("CART > ", cart);
+
   // Nos desubscribimos.
   subscribeCart;
 };
+
+const itemsNumber = derived(cartStore, ($cartStore) => $cartStore.length, 0);
+
+export { cartStore, addProductToCart, itemsNumber };

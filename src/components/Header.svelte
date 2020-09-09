@@ -1,10 +1,10 @@
 <script>
-  import { CartStore } from "../stores/CartStore.js";
+  import { derived } from "svelte/store";
+  import { itemsNumber } from "../stores/CartStore";
 
   let zoom = false;
-  $: totalQuantity = $CartStore.length || 0;
 
-  $: if (totalQuantity) {
+  $: if ($itemsNumber) {
     zoom = true;
     setTimeout(() => (zoom = false), 500);
   }
@@ -60,7 +60,7 @@
 
   <div class="cart">
     <div class="total-quantity" class:zoom>
-      <span class="total-quantity-number">{totalQuantity}</span>
+      <span class="total-quantity-number">{$itemsNumber}</span>
     </div>
     <img src="/images/shopping-cart.svg" alt="Shopping cart" />
   </div>
