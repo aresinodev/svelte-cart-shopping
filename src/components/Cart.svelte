@@ -42,7 +42,7 @@
   <CartList cart={$cartStore} />
   <div class="cart-footer">
     <strong class="cart-total-text">
-      TOTAL: <span class="cart-total">{$totalPrice}€</span>
+      TOTAL: <span class="cart-total">{$totalPrice.toFixed(2)}€</span>
     </strong>
   </div>
 </div>

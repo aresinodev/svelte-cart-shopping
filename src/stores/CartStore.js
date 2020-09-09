@@ -143,6 +143,18 @@ const addProductToCart = (product, quantity) => {
   subscribeCart;
 };
 
+const updateQuantityItemCart = (id, quantity) => {
+  cartStore.update((items) => {
+    const productCartIndex = items.findIndex((item) => item.id === id);
+    const itemCart = items[productCartIndex];
+    itemCart.quantity = quantity;
+
+    items[productCartIndex] = itemCart;
+
+    return [...items];
+  });
+};
+
 const deleteProductCart = (id) => {
   cartStore.update((cart) => {
     return cart.filter((item) => item.id !== id);
@@ -166,6 +178,7 @@ const totalPrice = derived(
 export {
   cartStore,
   addProductToCart,
+  updateQuantityItemCart,
   deleteProductCart,
   itemsNumber,
   totalPrice,

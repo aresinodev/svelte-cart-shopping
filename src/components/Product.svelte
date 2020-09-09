@@ -1,15 +1,18 @@
 <script>
   import Button from "../shared/Button.svelte";
+  import InputQuantity from "../shared/InputQuantity.svelte";
 
   import { addProductToCart } from "../stores/CartStore.js";
 
   export let product;
   let quantity = 0;
 
-  const removeQuantity = () => {
-    if (quantity > 0) {
-      quantity -= 1;
-    }
+  const removeQuantity = (event) => {
+    quantity = event.detail;
+  };
+
+  const addQuantity = (event) => {
+    quantity = event.detail;
   };
 </script>
 
@@ -60,28 +63,12 @@
     font-size: 17px;
   }
 
-  .quantity {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   .add-cart {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-right: 1em;
     padding-bottom: 1em;
-  }
-
-  input {
-    width: 3em;
-    font-size: 1.5em;
-    font-weight: 800;
-    border-radius: 5px;
-    text-align: center;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
   }
 </style>
 
@@ -95,11 +82,11 @@
       <span class="price-text">Precio:</span>
       <span class="price-value">{product.price}€</span>
     </div>
-    <div class="quantity mt-1">
-      <Button on:click={removeQuantity} type="secondary">-</Button>
-      <input type="number" bind:value={quantity} />
-      <Button on:click={() => (quantity += 1)} type="secondary">+</Button>
-    </div>
+    <span class="separator-top" />
+    <InputQuantity
+      {quantity}
+      on:addQuantity={addQuantity}
+      on:removeQuantity={removeQuantity} />
     <div class="add-cart mt-1">
       <Button
         on:click={() => {

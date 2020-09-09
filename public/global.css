@@ -9,6 +9,14 @@ body {
   margin-top: 1em;
 }
 
+.separator-bottom {
+  margin-bottom: 0.5em;
+}
+
+.separator-top {
+  margin-top: 0.5em;
+}
+
 @keyframes zoom {
   0% {
     font-size: 14px;

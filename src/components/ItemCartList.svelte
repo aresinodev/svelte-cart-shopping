@@ -1,11 +1,27 @@
 <script>
   import Button from "../shared/Button.svelte";
-  import { deleteProductCart } from "../stores/CartStore";
+  import InputQuantity from "../shared/InputQuantity.svelte";
+  import {
+    deleteProductCart,
+    updateQuantityItemCart,
+  } from "../stores/CartStore";
 
   export let id, product, quantity;
 
   const deleteItem = () => {
     deleteProductCart(id);
+  };
+
+  const addQuantity = (event) => {
+    updateQuantityItemCart(id, event.detail);
+  };
+
+  const removeQuantity = (event) => {
+    if (event.detail === 0) {
+      deleteItem();
+    } else {
+      updateQuantityItemCart(id, event.detail);
+    }
   };
 </script>
 
@@ -36,14 +52,6 @@
     font-size: 17px;
     font-weight: 800;
   }
-
-  .product-quantity {
-    color: #565959;
-  }
-
-  .product-quantity strong {
-    color: #000000;
-  }
 </style>
 
 <div class="ItemCartList">
@@ -52,9 +60,12 @@
   <div class="content-product">
     <span class="product-name"><strong>{product.name}</strong></span>
     <span class="product-price">{product.price}€</span>
-    <span class="product-quantity" style="margin-bottom: 1em;">
-      Cantidad: <strong>{quantity}</strong>
-    </span>
+    <span class="separator-top" />
+    <InputQuantity
+      {quantity}
+      on:addQuantity={addQuantity}
+      on:removeQuantity={removeQuantity} />
+    <span class="separator-bottom" />
     <Button inverse={true} on:click={deleteItem}>Delete</Button>
   </div>
 </div>
