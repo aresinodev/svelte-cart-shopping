@@ -9,18 +9,19 @@
   export let id, product, quantity;
 
   const deleteItem = () => {
-    deleteProductCart(id);
+    const total = quantity * product.price;
+    deleteProductCart(id, total);
   };
 
   const addQuantity = (event) => {
-    updateQuantityItemCart(id, event.detail);
+    updateQuantityItemCart(id, event.detail, "+");
   };
 
   const removeQuantity = (event) => {
+    updateQuantityItemCart(id, event.detail, "-");
+
     if (event.detail === 0) {
       deleteItem();
-    } else {
-      updateQuantityItemCart(id, event.detail);
     }
   };
 </script>

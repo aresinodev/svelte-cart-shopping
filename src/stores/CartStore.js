@@ -1,6 +1,7 @@
 import { writable, derived } from "svelte/store";
 
 const cartStore = writable([]);
+const totalPrice = writable(0);
 
 const addProductToCart = (product, quantity) => {
   let cart;
@@ -28,11 +29,13 @@ const addProductToCart = (product, quantity) => {
     });
   }
 
+  updateTotalPrice(quantity * product.price, "+"); // totalPrice updated.
+
   // Nos desubscribimos.
   subscribeCart;
 };
 
-const updateQuantityItemCart = (id, quantity) => {
+const updateQuantityItemCart = (id, quantity, type) => {
   cartStore.update((items) => {
     const productCartIndex = items.findIndex((item) => item.id === id);
     const itemCart = items[productCartIndex];
@@ -40,29 +43,28 @@ const updateQuantityItemCart = (id, quantity) => {
 
     items[productCartIndex] = itemCart;
 
+    updateTotalPrice(itemCart.product.price, type);
+
     return [...items];
   });
 };
 
-const deleteProductCart = (id) => {
+const deleteProductCart = (id, total) => {
+  updateTotalPrice(total, "-");
+
   cartStore.update((cart) => {
     return cart.filter((item) => item.id !== id);
   });
 };
 
+const updateTotalPrice = (price, type) => {
+  totalPrice.update((value) => {
+    const newValue = type === "+" ? (value += price) : (value -= price);
+    return newValue;
+  });
+};
+
 const itemsNumber = derived(cartStore, ($cartStore) => $cartStore.length, 0);
-
-const totalPrice = derived(
-  cartStore,
-  ($cartStore) =>
-    $cartStore
-      .map((item) => {
-        return item.quantity * item.product.price;
-      })
-      .reduce((a, b) => a + b),
-
-  0
-);
 
 export {
   cartStore,
@@ -71,4 +73,5 @@ export {
   deleteProductCart,
   itemsNumber,
   totalPrice,
+  updateTotalPrice,
 };
