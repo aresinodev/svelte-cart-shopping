@@ -1,53 +1,48 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 
 const cartStore = writable([]);
 const totalPrice = writable(0);
 
-const addProductToCart = (product, quantity) => {
+const addProduct = (product, quantity) => {
   let cart;
-  const subscribeCart = cartStore.subscribe((value) => {
-    cart = value;
+  const unsubscribeCart = cartStore.subscribe((value) => {
+    cart = [...value];
   });
 
-  const copiedCart = [...cart];
-  let itemCart = copiedCart.find((item) => item.product.id === product.id);
+  let itemFound = cart.find((item) => item.product.id === product.id);
 
-  if (itemCart) {
-    itemCart.quantity++;
+  if (itemFound) {
+    itemFound.quantity++;
 
-    cartStore.update(() => copiedCart);
+    cartStore.set(cart);
   } else {
     cartStore.update((items) => {
-      const copiedItems = [...items];
-      const itemToCart = {
-        id: cart.length + 1,
+      const itemToAdd = {
+        id: product.id,
         product,
         quantity,
       };
 
-      return [itemToCart, ...copiedItems];
+      return [itemToAdd, ...items];
     });
   }
 
   updateTotalPrice(quantity * product.price, "+"); // totalPrice updated.
 
   // Nos desubscribimos.
-  subscribeCart;
+  unsubscribeCart;
 };
 
-const updateQuantityItemCart = (id, quantity, type) => {
-  cartStore.update((items) => {
-    const copiedItems = [...items];
-    const itemCart = copiedItems.find((item) => item.id === id);
-    productCart.quantity = quantity;
+const updateItemQuantity = (id, quantity, type) => {
+  let items = get(cartStore);
 
-    updateTotalPrice(itemCart.product.price, type);
+  const itemFound = items.find((item) => item.id === id);
+  itemFound.quantity = quantity;
 
-    return copiedItems;
-  });
+  updateTotalPrice(itemFound.product.price, type);
 };
 
-const deleteProductCart = (id, total) => {
+const deleteProduct = (id, total) => {
   updateTotalPrice(total, "-");
 
   cartStore.update((cart) => {
@@ -65,9 +60,9 @@ const itemsNumber = derived(cartStore, ($cartStore) => $cartStore.length, 0);
 
 export {
   cartStore,
-  addProductToCart,
-  updateQuantityItemCart,
-  deleteProductCart,
+  addProduct,
+  updateItemQuantity,
+  deleteProduct,
   itemsNumber,
   totalPrice,
   updateTotalPrice,

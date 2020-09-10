@@ -1,24 +1,21 @@
 <script>
   import Button from "../shared/Button.svelte";
   import InputQuantity from "../shared/InputQuantity.svelte";
-  import {
-    deleteProductCart,
-    updateQuantityItemCart,
-  } from "../stores/CartStore";
+  import { deleteProduct, updateItemQuantity } from "../stores/CartStore";
 
   export let id, product, quantity;
 
   const deleteItem = () => {
     const total = quantity * product.price;
-    deleteProductCart(id, total);
+    deleteProduct(id, total);
   };
 
   const addQuantity = (event) => {
-    updateQuantityItemCart(id, event.detail, "+");
+    updateItemQuantity(id, event.detail, "+");
   };
 
   const removeQuantity = (event) => {
-    updateQuantityItemCart(id, event.detail, "-");
+    updateItemQuantity(id, event.detail, "-");
 
     if (event.detail === 0) {
       deleteItem();

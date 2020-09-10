@@ -2,7 +2,7 @@
   import Button from "../shared/Button.svelte";
   import InputQuantity from "../shared/InputQuantity.svelte";
 
-  import { addProductToCart } from "../stores/CartStore.js";
+  import { addProduct } from "../stores/CartStore.js";
 
   export let product;
   let quantity = 0;
@@ -90,7 +90,7 @@
     <div class="add-cart mt-1">
       <Button
         on:click={() => {
-          addProductToCart(product, quantity);
+          addProduct(product, quantity);
           quantity = 0;
         }}>
         Añadir al carro
